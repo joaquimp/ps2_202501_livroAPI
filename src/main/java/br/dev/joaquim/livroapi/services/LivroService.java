@@ -1,44 +1,36 @@
 package br.dev.joaquim.livroapi.services;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import br.dev.joaquim.livroapi.entities.Livro;
+import br.dev.joaquim.livroapi.repository.LivroRepository;
 
 @Service
 public class LivroService {
-    private List<Livro> livros = new ArrayList<>();
-
-    public LivroService() {
-        livros.add(new Livro("1234567", "A volta dos que não foram", 2025, "Desconhecido"));
-        livros.add(new Livro("7654321", "A ida dos que não vieram", 2030, "Conhecido"));
-    }
+    @Autowired
+    private LivroRepository repository;
     
     
     public List<Livro> buscarTodos() {
-        return livros;
+        return repository.findAll();
     }
 
     public Livro buscarPorId(String isbn) {
-        for(Livro l : livros) {
-            if(l.getIsbn().equals(isbn)) {
-                return l;
-            }
-        }
+        Optional<Livro> resp = repository.findById(isbn);
+        if(resp.isPresent()) return resp.get();
         return null;
     }
 
     public Livro registrarLivro(Livro novoLivro) {
-        if(novoLivro.getIsbn() == null) {
+        if(buscarPorId(novoLivro.getIsbn()) != null) return null;
+        try {
+            return repository.save(novoLivro);
+        } catch(Exception ex) {
+            ex.printStackTrace();
             return null;
         }
-        for(Livro l : livros) {
-            if(l.getIsbn().equals(novoLivro.getIsbn())) {
-                return null;
-            }
-        }
-
-        livros.add(novoLivro);
-        return novoLivro;
     }
 }
