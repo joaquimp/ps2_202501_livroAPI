@@ -13,7 +13,18 @@ public class LivroService {
     @Autowired
     private LivroRepository repository;
     
+    // CREATE
+    public Livro criar(Livro novoLivro) {
+        if(buscarPorId(novoLivro.getIsbn()) != null) return null;
+        try {
+            return repository.save(novoLivro);
+        } catch(Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
     
+    // READ
     public List<Livro> buscarTodos() {
         return repository.findAll();
     }
@@ -24,13 +35,19 @@ public class LivroService {
         return null;
     }
 
-    public Livro registrarLivro(Livro novoLivro) {
-        if(buscarPorId(novoLivro.getIsbn()) != null) return null;
+    // UPDATE
+    public Livro atualizar(Livro novoLivro) {
+        if(buscarPorId(novoLivro.getIsbn()) == null) return null;
         try {
             return repository.save(novoLivro);
         } catch(Exception ex) {
             ex.printStackTrace();
             return null;
         }
+    }
+
+    // DELETE
+    public void apagar(String isbn) {
+        repository.deleteById(isbn);
     }
 }
