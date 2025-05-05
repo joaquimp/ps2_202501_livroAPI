@@ -12,18 +12,19 @@ import br.dev.joaquim.livroapi.repository.LivroRepository;
 public class LivroService {
     @Autowired
     private LivroRepository repository;
-    
+
     // CREATE
     public Livro criar(Livro novoLivro) {
-        if(buscarPorId(novoLivro.getIsbn()) != null) return null;
+        if (buscarPorId(novoLivro.getIsbn()) != null)
+            return null;
         try {
             return repository.save(novoLivro);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }
     }
-    
+
     // READ
     public List<Livro> buscarTodos() {
         return repository.findAll();
@@ -31,16 +32,18 @@ public class LivroService {
 
     public Livro buscarPorId(String isbn) {
         Optional<Livro> resp = repository.findById(isbn);
-        if(resp.isPresent()) return resp.get();
+        if (resp.isPresent())
+            return resp.get();
         return null;
     }
 
     // UPDATE
     public Livro atualizar(Livro novoLivro) {
-        if(buscarPorId(novoLivro.getIsbn()) == null) return null;
+        if (buscarPorId(novoLivro.getIsbn()) == null)
+            return null;
         try {
             return repository.save(novoLivro);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }

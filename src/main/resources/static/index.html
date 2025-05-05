@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <section id="conteudo">Carregando...</section>
+
+    <script>
+      async function carregarLivros() {
+        const resp = await fetch('/livros');
+        if (resp.status === 200) {
+          const json = await resp.json();
+          return json;
+        } else {
+          livros = [];
+          document.getElementById(
+            'conteudo'
+          ).innerHTML = `Falha ao carregar. Código ${resp.status}.`;
+        }
+        return undefined;
+      }
+
+      async function mostrarLivros(livros) {
+        if (livros.length === 0) {
+          document.getElementById('conteudo').innerHTML =
+            'nenhum livro encontrato';
+          return;
+        }
+        const html = livros
+          .map(
+            (livro) => `<article id="${livro.isbn}">${livro.titulo}</article>`
+          )
+          .reduce((acc, livroHtml) => `${acc} ${livroHtml}`, '');
+        document.getElementById('conteudo').innerHTML = html;
+      }
+
+      window.onload = async () => {
+        const livros = await carregarLivros();
+        await mostrarLivros(livros);
+      };
+    </script>
+  </body>
+</html>

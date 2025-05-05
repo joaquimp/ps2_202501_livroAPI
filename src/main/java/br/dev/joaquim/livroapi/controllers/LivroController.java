@@ -1,6 +1,5 @@
 package br.dev.joaquim.livroapi.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +26,11 @@ public class LivroController {
     @PostMapping("/livros")
     public Livro registrarLivro(@RequestBody Livro novoLivro) {
         Livro resp = service.criar(novoLivro);
-        if(resp != null) return resp;
+        if (resp != null)
+            return resp;
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Problema com os dados informados");
     }
-    
+
     // READ
     @GetMapping("/livros")
     public List<Livro> buscarTodos() {
@@ -40,18 +40,19 @@ public class LivroController {
     @GetMapping("/livros/{isbn}")
     public Livro buscarPorId(@PathVariable("isbn") String isbn) {
         Livro resp = service.buscarPorId(isbn);
-        if(resp != null) return resp;
+        if (resp != null)
+            return resp;
 
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
-
 
     // UPDATE
     @PutMapping("/livros/{isbn}")
     public Livro atualizar(@PathVariable("isbn") String isbn, @RequestBody Livro novoLivro) {
         novoLivro.setIsbn(isbn);
         Livro resp = service.atualizar(novoLivro);
-        if(resp != null) return resp;
+        if (resp != null)
+            return resp;
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Problema com os dados informados");
     }
 
@@ -60,5 +61,5 @@ public class LivroController {
     public void apagar(@PathVariable("isbn") String isbn) {
         service.apagar(isbn);
     }
-    
+
 }
